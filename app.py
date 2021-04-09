@@ -29,13 +29,38 @@ scheduler.start()
 def base():
     return render_template('index.html')
 
-@app.route("/settings")
+@app.route("/settings", methods=['GET', 'POST'])
 def settings():
-    items = Settings.query.all()
-    results = [row.serialize() for row in items]
-    return jsonify({
-        "items": results
-    })
+    if request.method == 'GET':
+        results = Settings.query.all()
+        settings = {}
+        for row in results:
+            settings[row.setting] = row.value
+        return jsonify({
+            "items": settings
+        })
+    
+    if request.method == 'POST':
+        # get the data from the UI
+        data = request.get_json()['data']
+        
+        # update access token
+        access_token = Settings.query.get(1) # the access token ID
+        access_token.value = data['access_token']
+        db.session.commit()
+        db.session.refresh(access_token)
+        
+        # update refresh token
+        refresh_token = Settings.query.get(2) # the refresh token ID
+        refresh_token.value = data['refresh_token']
+        db.session.commit()
+        db.session.refresh(refresh_token)
+        
+        return jsonify({
+            "message": "success"
+        })
+        
+        
 
 if __name__ == '__main__':
     app.run()
