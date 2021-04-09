@@ -74,7 +74,7 @@ const App = () => {
      })
   }
 
-  React.useState(()=>{
+  React.useEffect(()=>{
     let code = querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code
     if(code !== undefined) {
       requestSpotifyTokens(code)
