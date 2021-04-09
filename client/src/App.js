@@ -85,10 +85,10 @@ const App = () => {
 
   return (
     <div className="h-screen w-100 bg-green-300 flex flex-col justify-center items-center p-5">
-      <p className="font-bold text-6xl my-5">Githubify</p>
+      <p className="font-bold text-6xl my-5">githubify</p>
       <div className="text-center max-w-max lg:max-w-lg">
         <p>
-          Thanks for using githubify. This web interface is to help you connect your Spotify account and get your access/refresh tokens in the database. This requires that you create an application with Spotify and do some minimal setup on Heroku. You can read more about that <a className="text-purple-700 underline" href="https://github.com/NLeRoy917/githubify">here</a>.
+          This web interface is to help you connect your Spotify account and get your access/refresh tokens in the database. This requires that you create an application with Spotify and do some minimal setup on Heroku. You can read more about that <a className="text-purple-700 underline" href="https://github.com/NLeRoy917/githubify">here</a>.
         </p>
       </div>
       <div className="flex flex-row my-5">

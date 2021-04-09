@@ -1,7 +1,5 @@
-from githubify.githubify import GithubifyBot
 from dotenv import load_dotenv
 import os
-import random
 
 load_dotenv()
 DB_URL = os.environ.get("DB_URL")
@@ -13,17 +11,6 @@ app = Flask(__name__, static_folder="client/build/static", template_folder="clie
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db.init_app(app)
-
-def update_bio():
-    bot = GithubifyBot(os.environ.get("GITHUB_ACCESS_TOKEN"))
-    bot.update_bio("🟢 Listening to: Song -- Artist {}".format(random.randint(0,10)))
-    del bot
-
-# background worker
-from apscheduler.schedulers.background import BackgroundScheduler
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_bio, trigger="interval", seconds=6000)
-scheduler.start()
 
 @app.route("/")
 def base():
