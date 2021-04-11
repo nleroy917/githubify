@@ -40,7 +40,9 @@ def cycle():
         else:
             dbdriver.update_most_recent_song(Spotify, current_track['item']['uri'])
             print('------> Song change... updating bio.')
+            
             # update bio here with githubify bot
+            bot.update_bio(current_track)
     else:
         print('------> No song playing')
     

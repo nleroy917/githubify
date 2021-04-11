@@ -18,19 +18,18 @@ class GithubifyBot:
     
     def get_current_song(self):
         return self._sp.current_song()
-        
     
-    def update_bio(self, message): 
+    def update_bio(self, current_track): 
         user = self._g.get_user()
         cleaned_bio = self._remove_listening_to(user.bio)
         
         print(cleaned_bio)
         
-        new_bio = cleaned_bio + message
+        new_bio = cleaned_bio + " 🟢 Listening to: " + self._sp.uri_to_track_and_artist(current_track['item']['uri'])
+        print(new_bio)
         
         user.edit(
             bio=new_bio
         )
-        print("success")
 
         
