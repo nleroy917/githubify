@@ -30,7 +30,10 @@ def cycle():
             bot._sp._refresh_token
         )
     
-    current_track = bot.get_current_song()
+    try:
+        current_track = bot.get_current_song()
+    except AttributeError:
+        print('------> Make sure to visit your app and authorize Spotify!')
     
     if current_track is not None:
         print('------> Listening to: ', bot._sp.uri_to_track_and_artist(current_track['item']['uri']))
