@@ -23,10 +23,7 @@ class GithubifyBot:
         user = self._g.get_user()
         cleaned_bio = self._remove_listening_to(user.bio)
         
-        print(cleaned_bio)
-        
         new_bio = cleaned_bio + " 🟢 Listening to: " + self._sp.uri_to_track_and_artist(current_track['item']['uri'])
-        print(new_bio)
         
         user.edit(
             bio=new_bio
