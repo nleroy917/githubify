@@ -16,8 +16,8 @@ class GithubifyBot:
     def _remove_listening_to(self, content):
         return content[0:content.find("🟢")]
     
-    def _current_song_change(self):
-        pass
+    def get_current_song(self):
+        return self._sp.current_song()
         
     
     def update_bio(self, message): 

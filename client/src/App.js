@@ -19,13 +19,13 @@ const App = () => {
   const [verifying, setVerifying] = React.useState(true)
 
   const fetchSettings = () => {
-    axios.get(`/settings`)
+    axios.get(`/tokens`)
     .then(res => {
-      let settings = res.data.items
+      let tokens = res.data.tokens
       setVerifying(false)
       setTokens({
-        accessToken: settings.SPOTIFY_ACCESS_TOKEN,
-        refreshToken: settings.SPOTIFY_REFRESH_TOKEN
+        accessToken: tokens.SPOTIFY_ACCESS_TOKEN,
+        refreshToken: tokens.SPOTIFY_REFRESH_TOKEN
       })
     })
     .catch(err => {
@@ -38,7 +38,7 @@ const App = () => {
       access_token: tokens.accessToken,
       refresh_token: tokens.refreshToken
     }
-    axios.post(`/settings`, {data: data})
+    axios.post(`/tokens`, {data: data})
     .then(res => {
       // pass
     })
