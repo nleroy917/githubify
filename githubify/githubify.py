@@ -14,14 +14,14 @@ class GithubifyBot:
         self._current_song = None
     
     def _remove_listening_to(self, content):
-        return content[0:content.find("🟢")]
+        return content[:content.find("🟢")]
     
     def get_current_song(self):
         return self._sp.current_song()
     
     def update_bio(self, current_track): 
         user = self._g.get_user()
-        cleaned_bio = self._remove_listening_to(user.bio)
+        cleaned_bio = self._remove_listening_to(user.bio).rstrip() # remove whitespace that appears
         
         new_bio = cleaned_bio + " 🟢 Listening to: " + self._sp.uri_to_track_and_artist(current_track['item']['uri'])
         
