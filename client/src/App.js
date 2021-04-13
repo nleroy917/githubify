@@ -19,7 +19,10 @@ const App = () => {
   const [verifying, setVerifying] = React.useState(true)
 
   const fetchSettings = () => {
-    axios.get(`/tokens`)
+    let hdrs = {
+      auth: process.env.REACT_APP_INTERNAL_TOKEN
+    }
+    axios.get(`/tokens`, {headers: hdrs})
     .then(res => {
       let tokens = res.data.tokens
       setVerifying(false)
@@ -38,7 +41,10 @@ const App = () => {
       access_token: tokens.accessToken,
       refresh_token: tokens.refreshToken
     }
-    axios.post(`/tokens`, {data: data})
+    let hdrs = {
+      auth: process.env.REACT_APP_INTERNAL_TOKEN,
+    }
+    axios.post(`/tokens`, {data: data, headers: hdrs})
     .then(res => {
       // pass
     })

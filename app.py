@@ -24,6 +24,16 @@ def base():
 
 @app.route("/tokens", methods=['GET', 'POST'])
 def tokens():
+    
+    #
+    # Check authentication
+    #
+    if request.headers.get('Auth') != os.environ.get('INTERNAL_TOKEN'):
+        return jsonify({
+            "message": "Invalid auth token."
+        }), 401
+    
+    
     if request.method == 'GET':
         results = Tokens.query.all()
         tokens = {}
