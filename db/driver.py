@@ -19,12 +19,18 @@ class Driver():
     def get_access_token(self, model):
         query = self._session.query(model)
         access_token = query.get(1) # access token ID
-        return access_token.value
+        if access_token is not None:
+            return access_token.value
+        else:
+            return ''
 
     def get_refresh_token(self, model):
         query = self._session.query(model)
-        access_token = query.get(2) # refresh token ID
-        return access_token.value
+        refresh_token = query.get(2) # refresh token ID
+        if refresh_token is not None:
+            return refresh_token.value
+        else:
+            return ''
     
     def update_tokens(self, model, new_access, new_refresh):
         
@@ -43,13 +49,23 @@ class Driver():
     def get_most_recent_song_URI(self, model):
         query = self._session.query(model)
         most_recent = query.get(1) # most recent song id
-        return most_recent.value
+        if most_recent is not None:
+            return most_recent.value    
+        else:
+            return ''
     
     def update_most_recent_song(self, model, song_uri):
         query = self._session.query(model)
         most_recent = query.get(1) # most recent song id
-        most_recent.value = song_uri
+        
+        # update if exists
+        # else add
+        if most_recent is not None:
+            most_recent.value = song_uri
+        else:
+            most_recent = model(
+                setting='MOST_RECENT_SONG',
+                value=song_uri
+            )
+            self._session.add(most_recent)
         self._session.commit()
-    
-    def __del__(self):
-        self._session.close()

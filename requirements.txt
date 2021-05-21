@@ -11,8 +11,7 @@ idna==2.10
 itsdangerous==1.1.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
-packaging==20.9
-psycopg2==2.8.6
+packaging==20.9 
 PyGithub==1.54.1
 PyJWT==1.7.1
 pyparsing==2.4.7

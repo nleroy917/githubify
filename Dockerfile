@@ -11,7 +11,7 @@ RUN yarn install --ignore-engines
 RUN yarn build
 
 # production env
-# use alpine linux with standard python-3.7
+# use alpine linux with standard python-3.9
 FROM python:3.9-alpine
 
 # install postgres dependencies
@@ -22,11 +22,8 @@ RUN apk update && apk upgrade && \
 RUN set -ex && \
     apk add --no-cache gcc musl-dev g++
 
-
-RUN apk add postgresql-dev
-
 # open up port 80
-EXPOSE 80
+EXPOSE 8000
 
 # set working directory
 WORKDIR /app
@@ -46,4 +43,4 @@ COPY --from=build /app/build /app/client/build
 RUN pip install -r requirements.txt
 
 # spin up server
-CMD ["gunicorn", "app:app"]
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:80"]

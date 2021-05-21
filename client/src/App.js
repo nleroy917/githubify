@@ -44,7 +44,7 @@ const App = () => {
     let hdrs = {
       auth: process.env.REACT_APP_INTERNAL_TOKEN,
     }
-    axios.post(`/tokens`, {data: data, headers: hdrs})
+    axios.post(`/tokens`, {data: data}, {headers: hdrs})
     .then(res => {
       // pass
     })

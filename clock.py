@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 # Env variables
 load_dotenv()
-DB_URL = os.getenv('DB_URL').replace('postgres', 'postgresql')
+DB_URL = "sqlite:///data.db"
 from db.driver import Driver
 
 dbdriver = Driver(DB_URL)
@@ -34,6 +34,7 @@ def cycle():
         current_track = bot.get_current_song()
     except AttributeError:
         print('------> Make sure to visit your app and authorize Spotify!')
+        current_track = None
     
     if current_track is not None:
         print('------> Listening to: ', bot._sp.uri_to_track_and_artist(current_track['item']['uri']))
