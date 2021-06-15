@@ -2,9 +2,16 @@
 FROM node:13.12.0-alpine as build
 WORKDIR /app
 
+# install git
+RUN apk update && apk upgrade && \
+    apk add --no-cache git
+
 COPY ./client /app/
-RUN yarn add --ignore-engines \
-    yarn build
+RUN yarn install --ignore-engines
+RUN yarn build
+
+RUN ls -al /app
+RUN ls -al /
 
 # production env
 # use alpine linux with standard python-3.9
