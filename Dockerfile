@@ -32,7 +32,7 @@ COPY app.py /app/app.py
 COPY .env /app/.env
 
 # copy build over
-COPY --from=build /app/build/ /app/client/build/
+COPY --from=build /app/build /app/client/build
 
 # install python dependencies
 RUN pip install -r requirements.txt
