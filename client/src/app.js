@@ -2,6 +2,7 @@ import React from 'react';
 import './styles.css';
 import axios from 'axios';
 import querystring from 'querystring';
+import { errorMonitor } from 'events';
 
 const base_url =  'https://accounts.spotify.com/authorize?'
 const payload = {
@@ -17,6 +18,7 @@ const App = () => {
 
   const [tokens, setTokens] = React.useState({})
   const [verifying, setVerifying] = React.useState(true)
+  const [currentSong, setCurrentSong] = React.useState({})
 
   const fetchSettings = () => {
     let hdrs = {
@@ -80,6 +82,9 @@ const App = () => {
      })
   }
 
+  /**
+   * Use Effect hook for fetching tokens
+   */
   React.useEffect(()=>{
     let code = querystring.parse(window.location.href.slice(window.location.href.indexOf('?')+1)).code
     if(code !== undefined) {
@@ -88,6 +93,28 @@ const App = () => {
       fetchSettings()
     }
   }, [])
+
+  /**
+   * Use effect hook for fetching the
+   * current song playing.
+   */
+  React.useEffect(() => {
+    let songFetcher = setInterval(() => {
+      if(tokens.accessToken) {
+        console.log(tokens)
+        let hdrs = {
+          Authorization: `Bearer ${tokens.accessToken}`
+        }
+        axios.get('https://api.spotify.com/v1/me/player/currently-playing', {headers: hdrs})
+        .then(res => {
+          setCurrentSong(res.data)
+        })
+      }
+    }, 2000) // 2 seconds
+
+    // clear interval on component unmount
+    return () => clearInterval(songFetcher)
+  },[tokens])
 
   return (
     <div className="h-screen w-100 bg-green-300 flex flex-col justify-center items-center p-5">
@@ -100,7 +127,7 @@ const App = () => {
       <div className="flex flex-row my-5">
           {
             tokens.accessToken && tokens.refreshToken ?
-            <button className="mx-2 bg-black border text-white border-black p-2 disabled:opacity-50 cursor-default" disabled={true}> 
+            <button className="mx-2 bg-white border-2 rounded-lg text-black font-bold border-black p-2 disabled:opacity-50 cursor-default" disabled={true}> 
               { 
                 `Spotify connected!`
               }
@@ -108,7 +135,7 @@ const App = () => {
             :
             <a href={authorize_url}>
               <button 
-                className="mx-2 bg-black border text-white border-black p-2 hover:bg-transparent hover:text-black transition-all disabled:opacity-50"
+                className="mx-2 bg-white border-2 rounded-lg text-black font-bold border-black p-2 hover:bg-black hover:text-white transition-all disabled:opacity-50"
                 disabled={verifying}
               >
               { 
@@ -120,7 +147,7 @@ const App = () => {
             </a>
           }
         <a href="https://github.com/NLeRoy917/githubify">
-          <button className="mx-2 bg-black border text-white border-black p-2 hover:bg-transparent hover:text-black transition-all">
+          <button className="mx-2 bg-white border-2 rounded-lg text-black font-bold border-black p-2 hover:bg-black hover:text-white transition-all disabled:opacity-50">
             About
           </button>
         </a>
@@ -128,14 +155,28 @@ const App = () => {
       <div className="flex flex-col">
           {
             tokens.accessToken ? 
-            <span className="text-lg"><span className="mx-1 text-lg">✅</span> Access token acquired!</span> :
-            <span className="text-lg"><span className="mx-1 text-lg">❌</span> No access token.</span>
+            <span className="text-xl font-bold my-1"><span className="mx-1 text-xl">✅</span> Access token acquired!</span> :
+            <span className="text-xl font-bold my-1"><span className="mx-1 text-xl">❌</span> No access token.</span>
           }
           {
             tokens.refreshToken ? 
-            <span className="text-lg"><span className="mx-1 text-lg">✅</span> Refresh token acquired!</span> :
-            <span className="text-lg"><span className="mx-1 text-lg">❌</span> No refresh token.</span>
+            <span className="text-xl font-bold my-1"><span className="mx-1 text-xl">✅</span> Refresh token acquired!</span> :
+            <span className="text-xl font-bold my-1"><span className="mx-1 text-xl">❌</span> No refresh token.</span>
           }
+      </div>
+      <div className="flex flex-col my-2">
+        {
+          Object.keys(currentSong).length > 0 ? 
+          <span className="flex flex-row items-center px-4 my-5 border-black border-4 rounded-lg bg-green-100">
+            <img className="mx-4 my-10 border-2 border-black" width="100" src={currentSong.item.album.images[0].url} />
+            <div>
+              <p className="text-3xl font-bold">{currentSong.item.name}</p>
+              <p className="text-xl"><em>{currentSong.item.artists[0].name}</em></p>
+            </div>
+          </span>
+          : <div></div>
+        }
+          
       </div>
     </div>
   );
