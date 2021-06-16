@@ -10,9 +10,6 @@ COPY ./client /app/
 RUN yarn install --ignore-engines
 RUN yarn build
 
-RUN ls -al /app
-RUN ls -al /
-
 # production env
 # use alpine linux with standard python-3.9
 FROM python:3.9-alpine
